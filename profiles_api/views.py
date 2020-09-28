@@ -4,6 +4,8 @@ from rest_framework import status # List of http status codes we can use to retu
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken # view to get token for token auth
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers # tells APIView what to expect for Post, Put and Patch
 from profiles_api import models
@@ -106,3 +108,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.UpdateOwnProfile,) # checks each user's permissions
     filter_backends = (filters.SearchFilter,)#that comma is just to tell python that this is a tuple
     search_fields = ('name','email',)
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES # adds default renderer_classes to our obtain auth token view,
+    # this enables it in Django Admin
