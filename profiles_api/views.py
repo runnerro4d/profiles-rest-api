@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status # List of http status codes we can use to return things from our API
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers # tells APIView what to expect for Post, Put and Patch
@@ -103,3 +104,5 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     authentication_classes = (TokenAuthentication,) # authenticates every request
     permission_classes = (permissions.UpdateOwnProfile,) # checks each user's permissions
+    filter_backends = (filters.SearchFilter,)#that comma is just to tell python that this is a tuple
+    search_fields = ('name','email',)
