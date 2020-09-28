@@ -27,7 +27,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             password=validated_data['password']
         )
-
         return user
 
     def update(self, instance, validated_data):
@@ -37,3 +36,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """Serializes profile feed items"""
+
+    class Meta:
+        model = models.ProfileFeedItem
+        fields = ('id', 'user_profile', 'status_text', 'created_on')# should not be able to create a new user profile through this.
+
+        # We add Key word arguments to make sure new user profiles and created_on are not added by the user.
+        extra_kwargs = {'user_profile': {'read_only': True}}
